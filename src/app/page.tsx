@@ -67,14 +67,18 @@ export default function Chat() {
           ? error.toString()
           : !aiDetectData
           ? "No data"
-          : aiDetectData.errors
-          ? aiDetectData.errors.map((e) => e.description).join("\n")
-          : aiDetectData.scores
-          ? aiDetectData.scores
-              .map(
-                (score) => `${Math.floor(score.score * 100)}% ${score.label}`
-              )
-              .join(", ")
+          : aiDetectData.error
+          ? aiDetectData.error.msg
+          : aiDetectData.score
+          ? `${Math.floor(aiDetectData.score * 100)}% AI`
+          // : aiDetectData.errors
+          // ? aiDetectData.errors.map((e) => e.description).join("\n")
+          // : aiDetectData.scores
+          // ? aiDetectData.scores
+          //     .map(
+          //       (score) => `${Math.floor(score.score * 100)}% ${score.label}`
+          //     )
+          //     .join(", ")
           : "No scores"}
       </div>
     </div>
