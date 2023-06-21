@@ -6,6 +6,7 @@ import { Share_Tech_Mono } from "next/font/google";
 import { AiDetectInput, AiDetectOutput } from "./api/aidetect/route";
 import useSWRMutation from "swr/mutation";
 import AiSprite from "../components/AiSprite";
+import ChatMessageBox from "../components/ChatMessageBox";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
@@ -53,11 +54,7 @@ export default function Chat() {
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
       <AiSprite mood={aiMood} />
 
-      <div className="fixed top-0 w-full max-w-xl p-2 mt-8 border border-gray-300 rounded shadow-xl bg-white bg-opacity-75">
-        <div className={AiFont.className}>
-          {lastAiMessage ? lastAiMessage.content : null}
-        </div>
-      </div>
+      <ChatMessageBox fontClass={AiFont.className} content={lastAiMessage ? lastAiMessage.content : ''}/>
 
       <form
         onSubmit={(e) => {
