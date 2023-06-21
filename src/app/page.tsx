@@ -1,88 +1,39 @@
 "use client";
 
-import { useChat } from "ai/react";
-import { useEffect, useState } from "react";
-import { Share_Tech_Mono } from "next/font/google";
-import { AiDetectInput, AiDetectOutput } from "./api/aidetect/route";
-import useSWRMutation from "swr/mutation";
-import AiSprite from "../components/AiSprite";
-import ChatMessageBox from "../components/ChatMessageBox";
-import AiMoodBar from "../components/AiMoodBar";
+import Link from "next/link";
 
-const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
-
-export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
-  const [lastInput, setLastInput] = useState("");
-  const [aiMood, setAiMood] = useState(1.0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAiMood(Math.max(0, aiMood - 0.01));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [aiMood]);
-
-  const {
-    data: aiDetectData,
-    error,
-    trigger,
-    isMutating,
-  } = useSWRMutation<AiDetectOutput, any, string, string>(
-    "/api/aidetect",
-    async (route, { arg }) => {
-      const res = await fetch(route, {
-        method: "POST",
-        body: JSON.stringify({ input: arg } as AiDetectInput),
-      });
-      return await res.json();
-    }
-  );
-
-  useEffect(()=>{
-    if (!aiDetectData)
-      return
-    const score = aiDetectData.score;
-    if (score) {
-      const moodEffect = (score - 0.5) * 0.5;
-      setAiMood(Math.max(0, Math.min(1, aiMood + moodEffect)));
-    }
-  }, [aiDetectData])
-
-  const lastAiMessage = messages.findLast((m) => m.role !== "user");
-
+export default function MainPage() {
   return (
-    <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
-      <AiSprite mood={aiMood} />
-
-      <ChatMessageBox fontClass={AiFont.className} content={lastAiMessage ? lastAiMessage.content : ''}/>
-
-      <form
-        onSubmit={(e) => {
-          setLastInput(input);
-          trigger(input);
-          handleSubmit(e);
-        }}
-      >
-        <input
-          className="fixed bottom-0 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl"
-          value={input}
-          placeholder={lastInput}
-          onChange={handleInputChange}
-          onPaste={(e) => {
-            e.preventDefault();
-            setAiMood(Math.max(0, aiMood - 0.1));
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            setAiMood(Math.max(0, aiMood - 0.1));
-          }}
-        />
-      </form>
-
-      <div className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
-        <AiMoodBar mood={aiMood} />
+    <article className={"prose grid grid-cols-2 w-full py-8 mx-auto stretch"}>
+      <h1 className="text-center col-span-2">AI or DIE</h1>
+      <p className="text-center col-span-2">
+        Can you chat like an AI? How long can you fool the killbot?
+      </p>
+      <div className="col-span-1">
+        <h2>Hints</h2>
+        Here are some practices that MAY lower your odds of detection:
+        <ul>
+          <li>Check your spelling</li>
+          <li>Use unnatural changes of subject</li>
+          <li>Use unnatural repetition</li>
+          <li>Speak formally and politely</li>
+          <li>State facts</li>
+        </ul>
       </div>
-    </div>
+      <div className="col-span-1">
+        <h2>For Your Safety</h2>
+        <ul>
+          <li>
+            Don't input sensitive information - OpenAI saves all input for
+            training
+          </li>
+          <li>
+            Don't believe or make use of AI-generated content without thorough
+            testing and verification
+          </li>
+        </ul>
+      </div>
+      <Link className="text-center col-span-2" href="/play"><h1>PLAY</h1></Link>
+    </article>
   );
 }
