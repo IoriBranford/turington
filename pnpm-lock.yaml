@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   ai:
-    specifier: 2.1.2
-    version: 2.1.2(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
+    specifier: 2.1.6
+    version: 2.1.6(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
   next:
     specifier: 13.4.6
     version: 13.4.6(react-dom@18.2.0)(react@18.2.0)
   openai-edge:
-    specifier: ^0.5.1
-    version: 0.5.1
+    specifier: ^1.1.0
+    version: 1.1.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -496,8 +496,8 @@ packages:
     hasBin: true
     dev: true
 
-  /ai@2.1.2(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
-    resolution: {integrity: sha512-WhyGH95Pv/gpgVMQT5eCyKXJh7irozr+bmpJ94somfRYBcAN2U270ii/OOHzGLrPM3liTbBilGQL2Ds7/5sz9Q==}
+  /ai@2.1.6(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
+    resolution: {integrity: sha512-YFCy7KEUDvuNGNuD8Bz7BynXB/eW2jJRAxAIM8Hb5/gpppZJs6/nTSdpocROxoGESJchtkFgYdygieG/wciEEQ==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.0.0
@@ -2205,8 +2205,8 @@ packages:
       is-wsl: 2.2.0
     dev: true
 
-  /openai-edge@0.5.1:
-    resolution: {integrity: sha512-/Q/b9wkPKWIzcnsp2o0Of5QW/t4A0XLw+E7rjVSYR3gLVt+pWpFuWCgWPWUVS1UrrLJPvzmndwe1JMpfqLRJIQ==}
+  /openai-edge@1.1.0:
+    resolution: {integrity: sha512-VkXT7yhKjr1QlC/wIMuPW/s003cPHUtiNjt/kH+54iKDZZ7eiGMPuymhpSWJ/zVZfVz6+94okGd6rNuu7JRBDw==}
     engines: {node: '>=12'}
     dev: false
 
