@@ -14,6 +14,13 @@ export default function Chat() {
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAiMood(Math.max(0, aiMood - 0.01));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [aiMood]);
+
   const {
     data: aiDetectData,
     error,
