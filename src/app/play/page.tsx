@@ -31,26 +31,16 @@ export default function Chat() {
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
 
-  useEffect(()=>{
-    if (!inputDisabled)
-      inputField.current.focus()
-  }, [inputDisabled])
-
   useEffect(() => {
     append({role:'system', content: `
     Initiate the conversation with a random topic.
     `})
   }, [])
 
-  useEffect(() => {
-    if (!moodDecaying)
-      return
-    const interval = setInterval(() => {
-      if (moodDecaying)
-        setAiMood(Math.max(0, aiMood - 0.0001));
-    }, 10);
-    return () => clearInterval(interval);
-  }, [aiMood, moodDecaying]);
+  useEffect(()=>{
+    if (!inputDisabled)
+      inputField.current.focus()
+  }, [inputDisabled])
 
   const {
     data: aiDetectData,
@@ -77,6 +67,16 @@ export default function Chat() {
       setAiMood(Math.max(0, Math.min(1, aiMood + moodEffect)));
     }
   }, [aiDetectData])
+
+  useEffect(() => {
+    if (!moodDecaying)
+      return
+    const interval = setInterval(() => {
+      if (moodDecaying)
+        setAiMood(Math.max(0, aiMood - 0.0001));
+    }, 10);
+    return () => clearInterval(interval);
+  }, [aiMood, moodDecaying]);
 
   const lastAiMessage = messages.findLast((m) => m.role === "assistant");
 
