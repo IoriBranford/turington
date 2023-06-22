@@ -24,12 +24,10 @@ export default function Chat() {
       setMoodDecaying(true)
       setInputDisabled(false)
     }
-    // onResponse: () => {
-    //   setInputDisabled(false)
-    // }
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
+  const [killPhrase, setKillPhrase] = useState('')
 
   useEffect(() => {
     append({role:'system', content: `
@@ -69,13 +67,17 @@ export default function Chat() {
   }, [aiDetectData])
 
   useEffect(() => {
-    if (!moodDecaying)
+    if (aiMood <= 0) {
+      setKillPhrase("killphrase killphrase killphrase killphrase")
+      setInputDisabled(false)
       return
-    const interval = setInterval(() => {
-      if (moodDecaying)
-        setAiMood(Math.max(0, aiMood - 0.0001));
-    }, 10);
-    return () => clearInterval(interval);
+    }
+    if (moodDecaying) {
+      const interval = setInterval(() => {
+        if (moodDecaying) setAiMood(Math.max(0, aiMood - 0.0001));
+      }, 10);
+      return () => clearInterval(interval);
+    }
   }, [aiMood, moodDecaying]);
 
   const lastAiMessage = messages.findLast((m) => m.role === "assistant");
@@ -84,11 +86,19 @@ export default function Chat() {
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
       <AiSprite mood={aiMood} />
 
-      <ChatMessageBox fontClass={AiFont.className} content={
-        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
+      {aiMood > 0 && <ChatMessageBox fontClass={AiFont.className} content={
+        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>}
 
       <form
         onSubmit={(e) => {
+          e.preventDefault()
+          if (aiMood <= 0) {
+            if (killPhrase === input) {
+              // kill the robot
+            }
+
+            return
+          }
           setInputDisabled(true)
           setLastInput(input);
           setMoodDecaying(false)
@@ -115,8 +125,11 @@ export default function Chat() {
         />
       </form>
 
+      {aiMood <= 0 && <div className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
+          ENTER KILLPHRASE!
+      </div>}
       <div className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
-        <AiMoodBar mood={aiMood} />
+        {aiMood > 0 ? <AiMoodBar mood={aiMood} /> : killPhrase}
       </div>
     </div>
   );
