@@ -12,12 +12,18 @@ import AiMoodBar from "../../components/AiMoodBar";
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
-  const [moodDecaying, setMoodDecaying] = useState(true)
-  const { messages, input, error: chatError, handleInputChange, handleSubmit } = useChat({
+  const [moodDecaying, setMoodDecaying] = useState(false)
+  const { messages, input, error: chatError, handleInputChange, handleSubmit, append } = useChat({
     onFinish: () => setMoodDecaying(true),
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
+
+  useEffect(() => {
+    append({role:'system', content: `
+    Initiate the conversation with a random topic.
+    `})
+  }, [])
 
   useEffect(() => {
     if (!moodDecaying)
@@ -55,7 +61,7 @@ export default function Chat() {
     }
   }, [aiDetectData])
 
-  const lastAiMessage = messages.findLast((m) => m.role !== "user");
+  const lastAiMessage = messages.findLast((m) => m.role === "assistant");
 
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
