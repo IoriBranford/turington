@@ -13,10 +13,8 @@ const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
   const [moodDecaying, setMoodDecaying] = useState(true)
-  const [chatError, setChatError] = useState<Error>(null!)
-  const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({
+  const { messages, input, error: chatError, handleInputChange, handleSubmit } = useChat({
     onFinish: () => setMoodDecaying(true),
-    onError: (e) => setChatError(e)
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
@@ -33,7 +31,7 @@ export default function Chat() {
 
   const {
     data: aiDetectData,
-    error,
+    error: aiDetectError,
     trigger,
     isMutating,
   } = useSWRMutation<AiDetectOutput, any, string, string>(
@@ -68,7 +66,6 @@ export default function Chat() {
 
       <form
         onSubmit={(e) => {
-          setChatError(null!)
           setLastInput(input);
           setMoodDecaying(false)
           trigger(input);
