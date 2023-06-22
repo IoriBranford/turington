@@ -20,6 +20,10 @@ export default function Chat() {
       setMoodDecaying(true)
       setInputDisabled(false)
     },
+    onError: () => {
+      setMoodDecaying(true)
+      setInputDisabled(false)
+    }
     // onResponse: () => {
     //   setInputDisabled(false)
     // }
