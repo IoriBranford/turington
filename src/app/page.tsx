@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function MainPage() {
   return (
-    <article className={"prose grid grid-cols-2 w-full py-8 mx-auto stretch"}>
+    <article className={"prose p-8 md:grid grid-cols-2 w-full py-8 mx-auto stretch"}>
       <h1 className="text-center col-span-2">AI or DIE</h1>
       <p className="text-center col-span-2">
         Can you chat like an AI? How long can you fool the killbot?
