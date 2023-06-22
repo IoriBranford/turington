@@ -13,8 +13,10 @@ const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
   const [moodDecaying, setMoodDecaying] = useState(true)
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    onFinish: () => setMoodDecaying(true)
+  const [chatError, setChatError] = useState<Error>(null!)
+  const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({
+    onFinish: () => setMoodDecaying(true),
+    onError: (e) => setChatError(e)
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
@@ -61,7 +63,8 @@ export default function Chat() {
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
       <AiSprite mood={aiMood} />
 
-      <ChatMessageBox fontClass={AiFont.className} content={lastAiMessage ? lastAiMessage.content : ''}/>
+      <ChatMessageBox fontClass={AiFont.className} content={
+        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
 
       <form
         onSubmit={(e) => {
