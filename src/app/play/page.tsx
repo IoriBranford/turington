@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "ai/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Share_Tech_Mono } from "next/font/google";
 import { AiDetectInput, AiDetectOutput } from "../api/aidetect/route";
 import useSWRMutation from "swr/mutation";
@@ -12,6 +12,7 @@ import AiMoodBar from "../../components/AiMoodBar";
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
+  const inputField = useRef<HTMLInputElement>(null!)
   const [inputDisabled, setInputDisabled] = useState(true)
   const [moodDecaying, setMoodDecaying] = useState(false)
   const { messages, input, error: chatError, handleInputChange, handleSubmit, append } = useChat({
@@ -25,6 +26,11 @@ export default function Chat() {
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
+
+  useEffect(()=>{
+    if (!inputDisabled)
+      inputField.current.focus()
+  }, [inputDisabled])
 
   useEffect(() => {
     append({role:'system', content: `
@@ -87,6 +93,8 @@ export default function Chat() {
         }}
       >
         <input
+          autoFocus={true}
+          ref={inputField}
           className="fixed bottom-0 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl"
           disabled={inputDisabled}
           value={input}
