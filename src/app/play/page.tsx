@@ -68,6 +68,7 @@ export default function Chat() {
 
       <form
         onSubmit={(e) => {
+          setChatError(null!)
           setLastInput(input);
           setMoodDecaying(false)
           trigger(input);
