@@ -12,16 +12,22 @@ import AiMoodBar from "../../components/AiMoodBar";
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const [moodDecaying, setMoodDecaying] = useState(true)
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    onFinish: () => setMoodDecaying(true)
+  });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
 
   useEffect(() => {
+    if (!moodDecaying)
+      return
     const interval = setInterval(() => {
-      setAiMood(Math.max(0, aiMood - 0.01));
+      if (moodDecaying)
+        setAiMood(Math.max(0, aiMood - 0.01));
     }, 1000);
     return () => clearInterval(interval);
-  }, [aiMood]);
+  }, [aiMood, moodDecaying]);
 
   const {
     data: aiDetectData,
@@ -60,6 +66,7 @@ export default function Chat() {
       <form
         onSubmit={(e) => {
           setLastInput(input);
+          setMoodDecaying(false)
           trigger(input);
           handleSubmit(e);
         }}
