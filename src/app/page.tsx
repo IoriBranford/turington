@@ -11,24 +11,23 @@ export default function MainPage() {
       </p>
       <div className="col-span-1">
         <h2>Hints</h2>
-        Here are some practices that MAY lower your odds of detection:
+        These <i>may</i> lower your odds of detection:
         <ul>
-          <li>Check your spelling</li>
+          <li>Avoid misspellings and emojis</li>
           <li>Use unnatural changes of subject</li>
-          <li>Use unnatural repetition</li>
-          <li>Speak formally and politely</li>
-          <li>State facts</li>
+          <li>Use unnatural phrase repetitions</li>
+          <li>Be formal and polite</li>
+          <li>Stick to the facts</li>
         </ul>
       </div>
       <div className="col-span-1">
         <h2>For Your Safety</h2>
         <ul>
           <li>
-            Don't input sensitive information - OpenAI saves all input for
-            training
+            Don't input sensitive information
           </li>
           <li>
-            Don't believe or make use of AI-generated content without thorough
+            Don't believe or make use of generated content without thorough
             testing and verification
           </li>
         </ul>
