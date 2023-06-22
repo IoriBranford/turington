@@ -1,8 +1,4 @@
-export default function AiSprite({
-  mood,
-}: {
-  mood: number; // 0.0 - 1.0
-}) {
+export default function AiSprite({ mood = 1, scale = 1 }) {
   const expression =
     mood < 0
       ? "dead"
@@ -18,7 +14,11 @@ export default function AiSprite({
 
   return (
     <img
-      className="fixed self-center"
+      style={{
+        position: "fixed",
+        alignSelf: "center",
+        scale: scale
+      }}
       src={`ai-${expression}.svg`}
       alt={`ai-${expression}.svg`}
     />

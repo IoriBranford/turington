@@ -28,6 +28,7 @@ export default function Chat() {
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
   const [killPhrase, setKillPhrase] = useState('')
+  const [killTimer, setKillTimer] = useState(3000)
 
   useEffect(() => {
     append({role:'system', content: `
@@ -69,6 +70,7 @@ export default function Chat() {
   useEffect(() => {
     if (aiMood <= 0) {
       setKillPhrase("killphrase killphrase killphrase killphrase")
+      setKillTimer(3000)
       setInputDisabled(false)
       return
     }
@@ -80,11 +82,24 @@ export default function Chat() {
     }
   }, [aiMood, moodDecaying]);
 
+  useEffect(() => {
+    if (killPhrase === '')
+      return
+    if (killTimer <= 0) {
+      console.log("YOU LOSE")
+      return
+    }
+    const interval = setInterval(() => {
+      setKillTimer(killTimer - 10)
+    }, 10);
+    return () => clearInterval(interval);
+  }, [killPhrase, killTimer])
+
   const lastAiMessage = messages.findLast((m) => m.role === "assistant");
 
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
-      <AiSprite mood={aiMood} />
+      <AiSprite mood={aiMood} scale={1 + (3000-killTimer)/750} />
 
       {aiMood > 0 && <ChatMessageBox fontClass={AiFont.className} content={
         chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>}
