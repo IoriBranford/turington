@@ -25,6 +25,10 @@ export async function POST(req: Request) {
     }))
   })
 
+  if (!response.ok) {
+    const {error} = await response.json() as { error: {message: string} }
+    return new Response(error.message, {status: response.status})
+  }
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response)
   // Respond with the stream
