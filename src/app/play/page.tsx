@@ -24,8 +24,8 @@ export default function Chat() {
       return
     const interval = setInterval(() => {
       if (moodDecaying)
-        setAiMood(Math.max(0, aiMood - 0.01));
-    }, 1000);
+        setAiMood(Math.max(0, aiMood - 0.0001));
+    }, 10);
     return () => clearInterval(interval);
   }, [aiMood, moodDecaying]);
 

@@ -11,7 +11,7 @@ export default function AiMoodBar({ mood = 1 }) {
     color = "gold";
     label = "CAUTION";
   }
-  const width = `${Math.ceil(mood * 100)}%`;
+  const width = `${(mood * 100)}%`;
   return <div style={{
     width: width,
     height: '100%',
