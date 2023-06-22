@@ -12,9 +12,16 @@ import AiMoodBar from "../../components/AiMoodBar";
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
 export default function Chat() {
+  const [inputDisabled, setInputDisabled] = useState(true)
   const [moodDecaying, setMoodDecaying] = useState(false)
   const { messages, input, error: chatError, handleInputChange, handleSubmit, append } = useChat({
-    onFinish: () => setMoodDecaying(true),
+    onFinish: () => {
+      setMoodDecaying(true)
+      setInputDisabled(false)
+    },
+    // onResponse: () => {
+    //   setInputDisabled(false)
+    // }
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
@@ -72,6 +79,7 @@ export default function Chat() {
 
       <form
         onSubmit={(e) => {
+          setInputDisabled(true)
           setLastInput(input);
           setMoodDecaying(false)
           trigger(input);
@@ -80,6 +88,7 @@ export default function Chat() {
       >
         <input
           className="fixed bottom-0 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl"
+          disabled={inputDisabled}
           value={input}
           placeholder={lastInput}
           onChange={handleInputChange}
