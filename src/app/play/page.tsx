@@ -8,6 +8,7 @@ import useSWRMutation from "swr/mutation";
 import AiSprite from "../../components/AiSprite";
 import ChatMessageBox from "../../components/ChatMessageBox";
 import AiMoodBar from "../../components/AiMoodBar";
+import GameOverBlood from "@/src/components/GameOverBlood";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function Chat() {
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
   const [aiAlive, setAiAlive] = useState(true)
+  const [playerAlive, setPlayerAlive] = useState(true)
   const [killPhrase, setKillPhrase] = useState('')
   const [killTimer, setKillTimer] = useState(KillTime)
 
@@ -87,7 +89,7 @@ export default function Chat() {
     if (killPhrase === '')
       return
     if (killTimer <= 0) {
-      console.log("YOU LOSE")
+      setPlayerAlive(false)
       return
     }
     const interval = setInterval(() => {
@@ -106,7 +108,7 @@ export default function Chat() {
         chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
 
       <form
-        hidden={!aiAlive}
+        hidden={!aiAlive || !playerAlive}
         onSubmit={(e) => {
           e.preventDefault()
           if (aiMood <= 0) {
@@ -145,12 +147,13 @@ export default function Chat() {
         />
       </form>
 
-      <div hidden={killPhrase === ''} className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
+      <div hidden={killPhrase === '' || !playerAlive} className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
           ENTER KILLPHRASE!
       </div>
-      <div hidden={!aiAlive} className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
+      <div hidden={!aiAlive || !playerAlive} className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
         {aiMood > 0 ? <AiMoodBar mood={aiMood} /> : killPhrase}
       </div>
+      <GameOverBlood hidden={playerAlive} />
     </div>
   );
 }
