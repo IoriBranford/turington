@@ -1,8 +1,8 @@
-export default function AiSprite({ mood = 1, scale = 1 }) {
+export default function AiSprite({ mood = 1, scale = 1, alive = true }) {
   const expression =
-    mood < 0
+    !alive
       ? "dead"
-      : mood == 0
+      : mood <= 0
       ? "hostile"
       : mood <= 0.2
       ? "annoyed"
@@ -19,6 +19,7 @@ export default function AiSprite({ mood = 1, scale = 1 }) {
         alignSelf: "center",
         scale: scale
       }}
+      draggable={false}
       src={`ai-${expression}.svg`}
       alt={`ai-${expression}.svg`}
     />
