@@ -154,6 +154,7 @@ export default function Chat() {
         {aiMood > 0 ? <AiMoodBar mood={aiMood} /> : killPhrase}
       </div>
       <GameOverBlood hidden={playerAlive} />
+      <article hidden={aiAlive} className="fixed prose w-full max-w-xl text-center"><h1>YOU WIN!</h1></article>
     </div>
   );
 }
