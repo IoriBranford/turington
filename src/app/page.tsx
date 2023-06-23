@@ -9,15 +9,21 @@ export default function MainPage() {
       <p className="text-center col-span-2">
         Can you chat like an AI? How long can you fool the killbot?
       </p>
+      <h2 className="text-center col-span-2">How to Play</h2>
+      <p className="col-span-2">
+        Chat with the AI killbot. It will analyze your answers to determine whether you are AI or human.
+        <br/>
+        When the killbot determines you are human, a killphrase will appear. Quickly enter the killphrase to shut it down. The killphrase is case-insensitive.
+        <br/>
+        Don't even think about copying and pasting, or dragging and dropping.
+      </p>
       <div className="col-span-1">
         <h2>Hints</h2>
-        These <i>may</i> lower your odds of detection:
+        Some ways to lower your odds of detection:
         <ul>
-          <li>Avoid misspellings and emojis</li>
-          <li>Use unnatural changes of subject</li>
           <li>Use unnatural phrase repetitions</li>
-          <li>Be formal and polite</li>
-          <li>Stick to the facts</li>
+          <li>Be formal, polite, and impersonal</li>
+          <li>State facts; avoid opinions, feelings, or deeper analysis</li>
         </ul>
       </div>
       <div className="col-span-1">
