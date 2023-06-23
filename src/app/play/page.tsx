@@ -13,7 +13,7 @@ import { generate } from "random-words";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
-const KillTime = 10000
+const KillTime = 5000
 
 export default function Chat() {
   const inputField = useRef<HTMLInputElement>(null!)
@@ -108,7 +108,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
-      <AiSprite mood={aiMood} alive={aiAlive} scale={1 + 4*(KillTime-killTimer)/KillTime} />
+      <AiSprite mood={aiMood} alive={aiAlive} scale={1 + 8*(KillTime-killTimer)/KillTime} />
 
       <ChatMessageBox hidden={aiMood <= 0} fontClass={AiFont.className} content={
         chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
