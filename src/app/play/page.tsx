@@ -9,6 +9,7 @@ import AiSprite from "../../components/AiSprite";
 import ChatMessageBox from "../../components/ChatMessageBox";
 import AiMoodBar from "../../components/AiMoodBar";
 import GameOverBlood from "@/src/components/GameOverBlood";
+import { generate } from "random-words";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
@@ -72,7 +73,12 @@ export default function Chat() {
 
   useEffect(() => {
     if (aiMood <= 0) {
-      setKillPhrase("killphrase")
+      setKillPhrase(generate({
+        exactly: 2,
+        minLength: 8,
+        maxLength: 8,
+        join: ' '
+      }))
       setKillTimer(KillTime)
       setInputDisabled(false)
       return
