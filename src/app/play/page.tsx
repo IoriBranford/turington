@@ -11,11 +11,13 @@ import AiMoodBar from "../../components/AiMoodBar";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
+const KillTime = 10000
+
 export default function Chat() {
   const inputField = useRef<HTMLInputElement>(null!)
   const [inputDisabled, setInputDisabled] = useState(true)
   const [moodDecaying, setMoodDecaying] = useState(false)
-  const { messages, input, error: chatError, handleInputChange, handleSubmit, append } = useChat({
+  const { messages, input, error: chatError, handleInputChange, handleSubmit, append, setInput } = useChat({
     onFinish: () => {
       setMoodDecaying(true)
       setInputDisabled(false)
@@ -27,13 +29,12 @@ export default function Chat() {
   });
   const [lastInput, setLastInput] = useState("");
   const [aiMood, setAiMood] = useState(1.0);
+  const [aiAlive, setAiAlive] = useState(true)
   const [killPhrase, setKillPhrase] = useState('')
-  const [killTimer, setKillTimer] = useState(3000)
+  const [killTimer, setKillTimer] = useState(KillTime)
 
   useEffect(() => {
-    append({role:'system', content: `
-    Initiate the conversation with a random topic.
-    `})
+    append({role:'system', content: `Initiate the conversation with a random topic.`})
   }, [])
 
   useEffect(()=>{
@@ -69,8 +70,8 @@ export default function Chat() {
 
   useEffect(() => {
     if (aiMood <= 0) {
-      setKillPhrase("killphrase killphrase killphrase killphrase")
-      setKillTimer(3000)
+      setKillPhrase("killphrase")
+      setKillTimer(KillTime)
       setInputDisabled(false)
       return
     }
@@ -99,17 +100,21 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
-      <AiSprite mood={aiMood} scale={1 + (3000-killTimer)/750} />
+      <AiSprite mood={aiMood} alive={aiAlive} scale={1 + 4*(KillTime-killTimer)/KillTime} />
 
-      {aiMood > 0 && <ChatMessageBox fontClass={AiFont.className} content={
-        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>}
+      <ChatMessageBox hidden={aiMood <= 0} fontClass={AiFont.className} content={
+        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
 
       <form
+        hidden={!aiAlive}
         onSubmit={(e) => {
           e.preventDefault()
           if (aiMood <= 0) {
-            if (killPhrase === input) {
-              // kill the robot
+            if (aiAlive && killPhrase === input.trim().toLowerCase()) {
+              setAiAlive(false)
+              setKillPhrase('')
+              setInput('')
+              setInputDisabled(true)
             }
 
             return
@@ -140,10 +145,10 @@ export default function Chat() {
         />
       </form>
 
-      {aiMood <= 0 && <div className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
+      <div hidden={killPhrase === ''} className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
           ENTER KILLPHRASE!
-      </div>}
-      <div className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
+      </div>
+      <div hidden={!aiAlive} className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
         {aiMood > 0 ? <AiMoodBar mood={aiMood} /> : killPhrase}
       </div>
     </div>
