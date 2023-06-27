@@ -19,7 +19,7 @@ export default function Chat() {
   const inputField = useRef<HTMLInputElement>(null!)
   const [inputDisabled, setInputDisabled] = useState(true)
   const [moodDecaying, setMoodDecaying] = useState(false)
-  const { messages, input, error: chatError, handleInputChange, handleSubmit, append, setInput } = useChat({
+  const { messages, input, error: chatError, handleInputChange, append, setInput } = useChat({
     onFinish: () => {
       setMoodDecaying(true)
       setInputDisabled(false)
@@ -69,6 +69,11 @@ export default function Chat() {
       const moodEffect = (score - 0.5) * 0.5;
       setAiMood(Math.max(0, Math.min(1, aiMood + moodEffect)));
     }
+    append({
+      content: lastInput,
+      role: 'user',
+      createdAt: new Date()
+    })
   }, [aiDetectData])
 
   useEffect(() => {
@@ -131,7 +136,7 @@ export default function Chat() {
           setLastInput(input);
           setMoodDecaying(false)
           trigger(input);
-          handleSubmit(e);
+          setInput('')
         }}
       >
         <input
