@@ -67,13 +67,24 @@ export default function Chat() {
     const score = aiDetectData.score;
     if (score) {
       const moodEffect = (score - 0.5) * 0.5;
-      setAiMood(Math.max(0, Math.min(1, aiMood + moodEffect)));
+      const newMood = Math.max(0, Math.min(1, aiMood + moodEffect))
+      if (newMood > 0) {
+        let tone = 'friendly'
+        if (newMood < .2)
+          tone = 'hostile'
+        else if (newMood < .4)
+          tone = 'dismissive'
+        else if (newMood < .6)
+          tone = 'neutral'
+
+        append({
+          content: lastInput + ` (Please respond in a ${tone} tone.)`,
+          role: "user",
+          createdAt: new Date(),
+        });
+      }
+      setAiMood(newMood);
     }
-    append({
-      content: lastInput,
-      role: 'user',
-      createdAt: new Date()
-    })
   }, [aiDetectData])
 
   useEffect(() => {
