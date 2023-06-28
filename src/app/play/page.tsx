@@ -19,7 +19,7 @@ export default function Chat() {
   const inputField = useRef<HTMLInputElement>(null!)
   const [inputDisabled, setInputDisabled] = useState(true)
   const [moodDecaying, setMoodDecaying] = useState(false)
-  const { messages, input, error: chatError, handleInputChange, append, setInput } = useChat({
+  const { messages, input, isLoading, error: chatError, handleInputChange, append, setInput } = useChat({
     onFinish: () => {
       setMoodDecaying(true)
       setInputDisabled(false)
@@ -120,34 +120,45 @@ export default function Chat() {
     return () => clearInterval(interval);
   }, [killPhrase, killTimer])
 
-  const lastAiMessage = messages.findLast((m) => m.role === "assistant");
+  const lastMessage = messages[messages.length - 1]
+  const messageBoxContent =
+    (chatError ? chatError.message
+      : !isMutating && lastMessage?.role == 'assistant' ? lastMessage.content : "")
 
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch select-none">
-      <AiSprite mood={aiMood} alive={aiAlive} scale={1 + 8*(KillTime-killTimer)/KillTime} />
+      <AiSprite
+        mood={aiMood}
+        alive={aiAlive}
+        scale={1 + (8 * (KillTime - killTimer)) / KillTime}
+      />
 
-      <ChatMessageBox hidden={aiMood <= 0} fontClass={AiFont.className} content={
-        chatError ? chatError.message : lastAiMessage ? lastAiMessage.content : ''}/>
+      <ChatMessageBox
+        hidden={aiMood <= 0}
+        fontClass={AiFont.className}
+        content={messageBoxContent}
+        loading={isLoading || isMutating}
+      />
 
       <form
         hidden={!aiAlive || !playerAlive}
         onSubmit={(e) => {
-          e.preventDefault()
+          e.preventDefault();
           if (aiMood <= 0) {
             if (aiAlive && killPhrase === input.trim().toLowerCase()) {
-              setAiAlive(false)
-              setKillPhrase('')
-              setInput('')
-              setInputDisabled(true)
+              setAiAlive(false);
+              setKillPhrase("");
+              setInput("");
+              setInputDisabled(true);
             }
 
-            return
+            return;
           }
-          setInputDisabled(true)
+          setInputDisabled(true);
           setLastInput(input);
-          setMoodDecaying(false)
+          setMoodDecaying(false);
           trigger(input);
-          setInput('')
+          setInput("");
         }}
       >
         <input
@@ -169,14 +180,25 @@ export default function Chat() {
         />
       </form>
 
-      <div hidden={killPhrase === '' || !playerAlive} className="fixed bottom-24 w-full max-w-xl p-2 mb-8">
-          ENTER KILLPHRASE!
+      <div
+        hidden={killPhrase === "" || !playerAlive}
+        className="fixed bottom-24 w-full max-w-xl p-2 mb-8"
+      >
+        ENTER KILLPHRASE!
       </div>
-      <div hidden={!aiAlive || !playerAlive} className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl">
+      <div
+        hidden={!aiAlive || !playerAlive}
+        className="fixed bottom-16 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl"
+      >
         {aiMood > 0 ? <AiMoodBar mood={aiMood} /> : killPhrase}
       </div>
       <GameOverBlood hidden={playerAlive} />
-      <article hidden={aiAlive} className="fixed prose w-full max-w-xl text-center"><h1>YOU WIN!</h1></article>
+      <article
+        hidden={aiAlive}
+        className="fixed prose w-full max-w-xl text-center"
+      >
+        <h1>YOU WIN!</h1>
+      </article>
     </div>
   );
 }
