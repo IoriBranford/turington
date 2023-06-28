@@ -71,7 +71,7 @@ export default function Chat() {
       if (newMood > 0) {
         let tone = 'friendly'
         if (newMood < .2)
-          tone = 'hostile'
+          tone = 'irritable'
         else if (newMood < .4)
           tone = 'dismissive'
         else if (newMood < .6)
