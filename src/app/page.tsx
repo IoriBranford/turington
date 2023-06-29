@@ -38,9 +38,16 @@ export default function MainPage() {
           </li>
         </ul>
       </div>
-      <Link className="text-center col-span-2" href={{
-        href: "/play",
-      }}><h1>PLAY</h1></Link>
+      <form className="col-span-2 text-center" action={"/play"}>
+        {/* <h2 className="text-center">Options</h2>
+        <input type="checkbox" id="moodDecays" name="moodDecays" value="true"/>
+        <label htmlFor="moodDecays"> Time limit</label>
+        <br/>
+        <br/> */}
+        <button className="w-full text-4xl p-4 col-span-2 border rounded shadow" type="submit">
+          <b>PLAY</b>
+        </button>
+      </form>
     </article>
   );
 }
