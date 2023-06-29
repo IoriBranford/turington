@@ -15,7 +15,9 @@ export default function AiSprite({ mood = 1, scale = 1, alive = true }) {
   return (
     <img
       style={{
-        position: "fixed",
+        position: "absolute",
+        top: '50%',
+        transform: "translateY(-50%)",
         alignSelf: "center",
         scale: scale
       }}
