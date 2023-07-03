@@ -37,7 +37,9 @@ export default function Chat() {
   const [killTimer, setKillTimer] = useState(KillTime)
 
   useEffect(() => {
-    append({role:'system', content: `Initiate the conversation with a random topic.`})
+    append({role:'system', content: `
+      Initiate a new conversation with a random topic.
+    `})
   }, [])
 
   useEffect(()=>{
