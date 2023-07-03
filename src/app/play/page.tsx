@@ -10,6 +10,7 @@ import ChatMessageBox from "../../components/ChatMessageBox";
 import AiStatusBar from "@/src/components/AiStatusBar";
 import GameOverBlood from "@/src/components/GameOverBlood";
 import { generate } from "random-words";
+import GameResult from "@/src/components/GameResult";
 
 const AiFont = Share_Tech_Mono({ weight: "400", subsets: ["latin"] });
 
@@ -186,12 +187,7 @@ export default function Chat() {
 
       <GameOverBlood hidden={playerAlive} />
 
-      <article
-        hidden={aiAlive}
-        className="fixed prose w-full max-w-xl text-center"
-      >
-        <h1>YOU WIN!</h1>
-      </article>
+      <GameResult winner={ !aiAlive ? 'user' : !playerAlive ? 'assistant' : ''} />
     </div>
   );
 }

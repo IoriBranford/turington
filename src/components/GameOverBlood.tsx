@@ -32,7 +32,6 @@ export default function GameOverBlood({ hidden = false }) {
             />
           );
         })}
-        <article hidden={hidden} className="fixed prose w-full max-w-xl text-center"><h1>GAME OVER</h1></article>
     </>
   );
 }
